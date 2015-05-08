@@ -107,7 +107,7 @@ void Exercise5::renderMetaballs()
     //[-------------------------------------------------------]
     //[ Definitions                                           ]
     //[-------------------------------------------------------]
-    static const float s = 4.5f;
+    static const float s = 1.0f;
     static const float e = 3.5f;
     static const QColor outerColor = QColor(0, 0, 0);
     static const QColor innerColor = QColor(255, 255, 255);
@@ -152,13 +152,28 @@ void Exercise5::renderMetaballs()
                 //////////////////////////////////////////////////////////////////////////
                 // TODO: Use the added weights, s and e to interpolate between start, mid, and end color
                 //////////////////////////////////////////////////////////////////////////
-                float tmp = m_metaballs[i].y() + ((y - m_metaballs[i].y()) * ((map[y*w+x] - m_metaballs[i].x())/(x - m_metaballs[i].x())) );
-                if(tmp > s)
-					painter.setPen(innerColor);
-				else if((tmp > e && (tmp < s)))
-					painter.setPen(middleColor);
-				else
-					painter.setPen(outerColor);
+                float r, g, b;
+                r = g = b = 0.0f;
+                float factor = map[x+y*w];
+
+                if(factor < s)
+                {
+                    factor = qBound(0.0f, factor, 1.0f);
+                    r = (1-factor) * outerColor.red()/255 + factor * middleColor.red()/255;
+                    g = (1-factor) * outerColor.green()/255 + factor * middleColor.green()/255;
+                    b = (1-factor) * outerColor.blue()/255 + factor * middleColor.blue()/255;
+                    painter.setPen(QColor(r * 255, g * 255, b * 255));
+                }
+				else 
+                {
+					factor = qBound(0.0f, factor, 1.0f);
+                    r = (1-factor) * middleColor.red()/255 + factor * innerColor.red()/255;
+                    g = (1-factor) * middleColor.green()/255 + factor * innerColor.green()/255;
+                    b = (1-factor) * middleColor.blue()/255 + factor * innerColor.blue()/255;
+                    painter.setPen(QColor(r * 255, g * 255, b * 255));
+                }
+				/*else
+					painter.setPen(innerColor);*/
             }
             // Draw pixel
             painter.drawPoint(QPoint(x, y));
