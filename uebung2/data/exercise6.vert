@@ -47,6 +47,9 @@ void main()
     vec3 worldCoord = vec3(0.0, 0.0, 0.0);
     
     //worldCoord = ...
+    worldCoord.x = position.x;
+    worldCoord.y = height;
+    worldCoord.z = position.y;
 
     gl_Position = transform * vec4(worldCoord.x, 3.0 * worldCoord.y - 0.25, worldCoord.z, 1.0);
 
@@ -59,9 +62,10 @@ void main()
 
     // TODO: Hoehe verwenden
     //colorValue = ...
+    colorValue = height;
 
     // Farbwert zuweisen
-    colorValue1 = colorValue;
+    colorValue1 = 0;
     colorValue2 = colorValue;
-    colorValue3 = colorValue;
+    colorValue3 = glPosition.w * colorValue;
 }

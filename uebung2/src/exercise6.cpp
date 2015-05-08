@@ -83,8 +83,20 @@ void Exercise6::tessellate(const Triangle &triangle, std::vector<Triangle> &tria
     // Hinweis: Mit der Taste <w> kann zwischen Wireframe und normalem Dreiecksrendering umgeschaltet werden.
     //          Damit kann das Ergebnis der Tessellation einfacher Ueberprueft werden.
 
-    triangleBuffer.push_back(Triangle(triangle.x0, triangle.y0, triangle.x0+((triangle.x2-triangle.x0)/4), triangle.y1+((triangle.y0-triangle.y1)/2), triangle.x0+((triangle.x2-triangle.x0)/2), triangle.y0));
-    render();
+    float v3_x = (triangle.x1 + triangle.x0) / 2.0;
+    float v3_y = (triangle.y1 + triangle.y0) / 2.0;
+    float v4_x = (triangle.x2 + triangle.x1) / 2.0;
+    float v4_y = (triangle.y2 + triangle.y1) / 2.0;
+    float v5_x = (triangle.x2 + triangle.x0) / 2.0;
+    float v5_y = (triangle.y2 + triangle.y0) / 2.0;
+
+    triangleBuffer.push_back(Triangle(triangle.x0, triangle.y0, v3_x, v3_y, v5_x, v5_y));
+    triangleBuffer.push_back(Triangle(v3_x, v3_y, triangle.x1, triangle.y1, v4_x, v4_y));
+    triangleBuffer.push_back(Triangle(v5_x, v5_y, v4_x, v4_y, triangle.x2, triangle.y2));
+    triangleBuffer.push_back(Triangle(v5_x, v5_y, v3_x, v3_y, v4_x, v4_y));
+
+    //triangleBuffer.push_back(Triangle(triangle.x0, triangle.y0, triangle.x0+((triangle.x2-triangle.x0)/4), triangle.y1+((triangle.y0-triangle.y1)/2), triangle.x0+((triangle.x2-triangle.x0)/2), triangle.y0));
+    //render();
 
 }
 
@@ -98,7 +110,7 @@ void Exercise6::render()
     
     // Nutzen Sie m_currentBuffer und drawTriangles().
 
-    drawTriangles(1, (m_currentBuffer->size()/3));
+    drawTriangles(0, m_currentBuffer->size());
 }
 
 void Exercise6::drawTriangles(int start, int count)
