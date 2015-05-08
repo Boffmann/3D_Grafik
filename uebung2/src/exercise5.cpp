@@ -152,9 +152,10 @@ void Exercise5::renderMetaballs()
                 //////////////////////////////////////////////////////////////////////////
                 // TODO: Use the added weights, s and e to interpolate between start, mid, and end color
                 //////////////////////////////////////////////////////////////////////////
-                if(map[y*w+x] > s)
+                float tmp = m_metaballs[i].y() + ((y - m_metaballs[i].y()) * ((map[y*w+x] - m_metaballs[i].x())/(x - m_metaballs[i].x())) );
+                if(tmp > s)
 					painter.setPen(innerColor);
-				else if((map[x*y] > e && (map[x*y] < s)))
+				else if((tmp > e && (tmp < s)))
 					painter.setPen(middleColor);
 				else
 					painter.setPen(outerColor);
