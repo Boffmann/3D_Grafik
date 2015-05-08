@@ -1,0 +1,2 @@
+/home/boffmann/Documents/3D/Uebungen/Übung2/programmrahmen/build/CMakeFiles/FrameworkQt.dir
+/home/boffmann/Documents/3D/Uebungen/Übung2/programmrahmen/build/CMakeFiles/FrameworkQt_automoc.dir
