@@ -69,6 +69,5 @@ void main()
     colorValue1 = 0;
     colorValue2 = colorValue;
     colorValue3 = gl_Position.w * colorValue;
-    
 
 }

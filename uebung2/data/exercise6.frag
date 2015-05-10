@@ -43,6 +43,11 @@ void main()
     // TODO: Aufgabe 6c) - Farbe berechnen
     //////////////////////////////////////////////////
     
+    // vec4 color_0(0.20392156862,	0.5294117647,	0.0,			1.0);	//34 87 00	FF348700
+    // vec4 color_1(0.21960784313,	0.1725490196,	0.03921568627,	1.0);	//38 2C 0A	F382C0A
+    // vec4 color_2(0.50196078431,	0.50196078431,	0.50196078431,	1.0);	//80 80 80	FF808080
+    // vec4 color_3(0.91372549019,	0.91372549019,	0.91372549019,	1.0);	//E9 E9 E9	FFE9E9E9
+
 	vec4 color0;
 	color0[0] = 0x34;
 	color0[1] = 0x87;
@@ -81,6 +86,20 @@ void main()
     } else {
         color = color3;
     }
+
+    // if(colorValue < 0.1) {
+    // 	color = color0;
+    // } else if(colorValue < 1.0/3.0) {
+    //     color = mix(color0, color1, (colorValue-0.1)/(1.0/3.0-0.1));
+    // } else if(colorValue < 2.0/3.0) {
+    //     color = mix(color1, color2, (colorValue-1.0/3.0)/(2.0/3.0-1.0/3.0));
+    // } else if(colorValue < 0.9) {
+    //     color = mix(color2, color3, (colorValue-2.0/3.0)/(0.9-2.0/3.0));
+    // } else {
+    //     color = color3;
+    // }
+
+
 
 
     // Als Graustufenwert interpretieren
