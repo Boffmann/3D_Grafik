@@ -32,7 +32,8 @@ out float colorValue3;
 
 float getHeight(vec2 uv)
 {
-    return texture2D(heightMap, uv).r;
+    return texture(heightMap, uv).r;
+
 }
 
 void main()
@@ -67,5 +68,5 @@ void main()
     // Farbwert zuweisen
     colorValue1 = 0;
     colorValue2 = colorValue;
-    colorValue3 = glPosition.w * colorValue;
+    colorValue3 = gl_Position.w * colorValue;
 }

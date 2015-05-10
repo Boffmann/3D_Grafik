@@ -42,12 +42,28 @@ void main()
     //////////////////////////////////////////////////
     // TODO: Aufgabe 6c) - Farbe berechnen
     //////////////////////////////////////////////////
-    vec4 color_0(0.20392156862,	0.5294117647,	0.0,			1.0);	//34 87 00
-    vec4 color_1(0.21960784313,	0.1725490196,	0.03921568627,	1.0);	//38 2C 0A
-    vec4 color_2(0.50196078431,	0.50196078431,	0.50196078431,	1.0);	//80 80 80
-    vec4 color_3(0.91372549019,	0.91372549019,	0.91372549019,	1.0);	//E9 E9 E9
-
-
+    
+	vec4 color0;
+	color0[0] = 0x34;
+	color0[1] = 0x87;
+	color0[2] = 0x00;
+	color0[3] = 0xFF;
+	vec4 color1;
+	color1[0] = 0x38;
+	color1[1] = 0x2C;
+	color1[2] = 0x0A;
+	color1[3] = 0xFF;
+	vec4 color2;
+	color2[0] = 0x80;
+	color2[1] = 0x80;
+	color2[2] = 0x80;
+	color2[3] = 0xFF;
+	vec4 color3;
+	color3[0] = 0xE9;
+	color3[1] = 0xE9;
+	color3[2] = 0xE9;
+	color3[3] = 0xFF;
+	
 
     if(colorValue < 0.1) {
         color = color0;
