@@ -34,9 +34,9 @@ void main()
 {
     // TODO: Farbwert auslesen (vom Modus abhaengig)
     float colorValue = 0.0;
-    if(interpolationMode == 1) colorValue = colorValue1;
-    if(interpolationMode == 2) colorValue = colorValue2;
-    if(interpolationMode == 3) colorValue = colorValue3;
+    if(interpolationMode == 0) colorValue = colorValue1;
+    if(interpolationMode == 1) colorValue = colorValue2;
+    if(interpolationMode == 2) colorValue = gl_FragCoord.w*colorValue3;
 
     
     //////////////////////////////////////////////////
@@ -47,14 +47,18 @@ void main()
     vec4 color_2(0.50196078431,	0.50196078431,	0.50196078431,	1.0);	//80 80 80
     vec4 color_3(0.91372549019,	0.91372549019,	0.91372549019,	1.0);	//E9 E9 E9
 
+
+
     if(colorValue < 0.1) {
-    	color = color_1;
-    } else if (colorValue < 0.333) {
-    	color = color_2;
-    } else if (colorValue < 0.667) {
-    	color = color_3;
-    } else if (colorValue < 0.9) {
-    	color = color_4;
+        color = color0;
+    }else if(colorValue < 1.0/3.0) {
+        color = mix(color0, color1, (colorValue-0.1)/(1.0/3.0-0.1));
+    }else if(colorValue < 2.0/3.0) {
+        color = mix(color1, color2, (colorValue-1.0/3.0)/(2.0/3.0-1.0/3.0));
+    }else if(colorValue < 0.9) {
+        color = mix(color2, color3, (colorValue-2.0/3.0)/(0.9-2.0/3.0));
+    }else{
+        color = color3;
     }
 
 
