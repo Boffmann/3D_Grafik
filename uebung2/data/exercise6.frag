@@ -11,8 +11,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775165
+// Matr.-Nr: 775014
 //
 // ======================================
 
@@ -22,9 +22,9 @@
 // Hinweis: Die Interpolationsmodi koennen vom laufenden Programm mittels der Tasten <1>, <2> und <3> gewechselt werden.
 //////////////////////////////////////////////////
 
-in float colorValue1;
-in float colorValue2;
-in float colorValue3;
+flat in float colorValue1;
+smooth in float colorValue2;
+noperspective in float colorValue3;
 
 out vec4 color;
 
@@ -64,16 +64,21 @@ void main()
 	color3[2] = 0xE9;
 	color3[3] = 0xFF;
 	
-
     if(colorValue < 0.1) {
         color = color0;
-    }else if(colorValue < 1.0/3.0) {
-        color = mix(color0, color1, (colorValue-0.1)/(1.0/3.0-0.1));
-    }else if(colorValue < 2.0/3.0) {
-        color = mix(color1, color2, (colorValue-1.0/3.0)/(2.0/3.0-1.0/3.0));
-    }else if(colorValue < 0.9) {
-        color = mix(color2, color3, (colorValue-2.0/3.0)/(0.9-2.0/3.0));
-    }else{
+    } else if(colorValue < 1.0/3.0) {
+        color[0] = color0[0] + colorValue * (color1[0] - color0[0]);
+       	color[1] = color0[1] + colorValue * (color1[1] - color0[1]);
+       	color[2] = color0[2] + colorValue * (color1[2] - color0[2]);
+    } else if(colorValue < 2.0/3.0) {
+        color[0] = color1[0] + colorValue * (color2[0] - color1[0]);
+       	color[1] = color1[1] + colorValue * (color2[1] - color1[1]);
+       	color[2] = color1[2] + colorValue * (color2[2] - color1[2]);
+    } else if(colorValue < 0.9) {
+		color[0] = color2[0] + colorValue * (color3[0] - color2[0]);
+       	color[1] = color2[1] + colorValue * (color3[1] - color2[1]);
+       	color[2] = color2[2] + colorValue * (color3[2] - color2[2]);
+    } else {
         color = color3;
     }
 

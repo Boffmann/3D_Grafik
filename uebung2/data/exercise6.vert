@@ -11,8 +11,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775165
+// Matr.-Nr: 775014
 //
 // ======================================
 
@@ -26,9 +26,9 @@ in vec2 position;
 // Hinweis: Die Interpolationsmodi koennen vom laufenden Programm mittels der Tasten <1>, <2> und <3> gewechselt werden.
 //////////////////////////////////////////////////
 
-out float colorValue1;
-out float colorValue2;
-out float colorValue3;
+flat out float colorValue1;
+smooth out float colorValue2;
+noperspective out float colorValue3;
 
 float getHeight(vec2 uv)
 {
@@ -69,4 +69,6 @@ void main()
     colorValue1 = 0;
     colorValue2 = colorValue;
     colorValue3 = gl_Position.w * colorValue;
+    
+
 }
