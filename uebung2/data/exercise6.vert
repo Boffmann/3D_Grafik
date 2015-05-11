@@ -47,7 +47,7 @@ void main()
     // Nutzen sie die Variable height fuer die Hoehe
     vec3 worldCoord = vec3(0.0, 0.0, 0.0);
     
-    //worldCoord = ...
+    // y-Achse ist Hoehe
     worldCoord.x = position.x;
     worldCoord.y = height;
     worldCoord.z = position.y;
@@ -62,12 +62,11 @@ void main()
     float colorValue = 0.0;
 
     // TODO: Hoehe verwenden
-    //colorValue = ...
     colorValue = height;
 
     // Farbwert zuweisen
-    colorValue1 = 0;
+    colorValue1 = colorValue;
     colorValue2 = colorValue;
-    colorValue3 = gl_Position.w * colorValue;
+    colorValue3 = colorValue;
 
 }
