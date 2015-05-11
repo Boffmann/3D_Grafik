@@ -47,19 +47,17 @@ void main()
 	vec4 color1 = vec4(0x38, 0x2C, 0x0A, 0xFF);
 	vec4 color2 = vec4(0x80, 0x80, 0x80, 0xFF);
 	vec4 color3 = vec4(0xE9, 0xE9, 0xE9, 0xFF);
-	
 
 	// interpolieren
     if(colorValue < 0.1) {
     	color = color0/255.0;
     } else if(colorValue < 1.0/3.0) {
-        color = mix(color0/255.0, color1/255.0, (colorValue-0.1)/(1.0/3.0-0.1));
+        color = mix(color0/255.0, color1/255.0, colorValue);
     } else if(colorValue < 2.0/3.0) {
-        color = mix(color1/255.0, color2/255.0, (colorValue-1.0/3.0)/(2.0/3.0-1.0/3.0));
+        color = mix(color1/255.0, color2/255.0, colorValue);
     } else if(colorValue < 0.9) {
-    	color = mix(color2/255.0, color3/255.0, (colorValue-2.0/3.0)/(0.9-2.0/3.0));
+    	color = mix(color2/255.0, color3/255.0, colorValue);
     } else {
     	color = color3/255.0;
     }
-
 }

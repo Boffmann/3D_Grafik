@@ -68,5 +68,4 @@ void main()
     colorValue1 = colorValue;
     colorValue2 = colorValue;
     colorValue3 = colorValue;
-
 }

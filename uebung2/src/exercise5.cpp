@@ -108,7 +108,7 @@ void Exercise5::renderMetaballs()
     //[ Definitions                                           ]
     //[-------------------------------------------------------]
     static const float s = 1.0f;
-    static const float e = 3.5f;
+    static const float e = 0.8f;
     static const QColor outerColor = QColor(0, 0, 0);
     static const QColor innerColor = QColor(255, 255, 255);
     static const QColor middleColor = QColor(255,0 ,0);
@@ -157,13 +157,14 @@ void Exercise5::renderMetaballs()
                     g = (1-factor) * outerColor.green()/255 + factor * middleColor.green()/255;
                     b = (1-factor) * outerColor.blue()/255 + factor * middleColor.blue()/255;
                     painter.setPen(QColor(r * 255, g * 255, b * 255));
-                }
-				else {
-					factor = qBound(0.0f, factor, 1.0f);
+                } else if (factor < s && factor > e) {
+                    factor = qBound(0.0f, factor, 1.0f);
                     r = (1-factor) * middleColor.red()/255 + factor * innerColor.red()/255;
                     g = (1-factor) * middleColor.green()/255 + factor * innerColor.green()/255;
                     b = (1-factor) * middleColor.blue()/255 + factor * innerColor.blue()/255;
-                    painter.setPen(QColor(r * 255, g * 255, b * 255));
+                    painter.setPen(QColor(r * 255, g * 255, b * 255));              
+                } else {
+                    painter.setPen(innerColor);              
                 }
             }
             // Draw pixel
