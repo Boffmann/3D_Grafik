@@ -11,8 +11,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775165
+// Matr.-Nr: 775014
 //
 // ======================================
 
@@ -26,13 +26,14 @@ in vec2 position;
 // Hinweis: Die Interpolationsmodi koennen vom laufenden Programm mittels der Tasten <1>, <2> und <3> gewechselt werden.
 //////////////////////////////////////////////////
 
-out float colorValue1;
-out float colorValue2;
-out float colorValue3;
+flat out float colorValue1;
+smooth out float colorValue2;
+noperspective out float colorValue3;
 
 float getHeight(vec2 uv)
 {
-    return texture2D(heightMap, uv).r;
+    return texture(heightMap, uv).r;
+
 }
 
 void main()
@@ -46,7 +47,7 @@ void main()
     // Nutzen sie die Variable height fuer die Hoehe
     vec3 worldCoord = vec3(0.0, 0.0, 0.0);
     
-    //worldCoord = ...
+    // y-Achse ist Hoehe
     worldCoord.x = position.x;
     worldCoord.y = height;
     worldCoord.z = position.y;
@@ -61,11 +62,10 @@ void main()
     float colorValue = 0.0;
 
     // TODO: Hoehe verwenden
-    //colorValue = ...
     colorValue = height;
 
     // Farbwert zuweisen
-    colorValue1 = 0;
+    colorValue1 = colorValue;
     colorValue2 = colorValue;
-    colorValue3 = glPosition.w * colorValue;
+    colorValue3 = colorValue;
 }
