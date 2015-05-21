@@ -34,9 +34,9 @@ void main()
 {
     // TODO: Farbwert auslesen (vom Modus abhaengig)
     float colorValue = 0.0;
-    if(interpolationMode == 1) colorValue = colorValue1;
-    if(interpolationMode == 2) colorValue = colorValue2;
-    if(interpolationMode == 3) colorValue = colorValue3;
+    if(interpolationMode == 0) colorValue = colorValue1;
+    if(interpolationMode == 1) colorValue = colorValue2;
+    if(interpolationMode == 2) colorValue = colorValue3;
     
     //////////////////////////////////////////////////
     // TODO: Aufgabe 6c) - Farbe berechnen
