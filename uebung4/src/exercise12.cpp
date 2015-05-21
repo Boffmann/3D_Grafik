@@ -46,7 +46,10 @@ QMatrix4x4 Exercise12::rotateClockwise(int frame)
     QMatrix4x4 transform;
 
     transform.setToIdentity();
-    transform.translate(0.0, 1.0, 0.0);
+    //transform.translate(0.0, 1.0, 0.0);
+    float degree = frame % 360;
+    transform.rotate(degree, QVector3D::QVector3D(0.0, 0.0, 1.0));
+    //transform.translate(0.0, 0.0, );
 
     return transform;
 }
