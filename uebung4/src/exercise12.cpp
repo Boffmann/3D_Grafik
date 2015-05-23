@@ -20,7 +20,9 @@
 #include <QOpenGLShaderProgram>
 
 #include "util/camera.h"
-
+#include <math.h>
+#include <iomanip>
+#include <iostream>
 #include <glm/vec3.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/geometric.hpp>
@@ -44,13 +46,57 @@ QMatrix4x4 Exercise12::rotateClockwise(int frame)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     QMatrix4x4 transform;
-
+#if 1
+    int degree = (frame/4) % 720;
+    float x;
+    float y;
+    int deg_tmp = degree % 90;
+    float tmp = sin(deg_tmp * (M_PI/180.0));
     transform.setToIdentity();
-    //transform.translate(0.0, 1.0, 0.0);
-    float degree = frame % 360;
-    transform.rotate(degree, QVector3D::QVector3D(0.0, 0.0, 1.0));
-    //transform.translate(0.0, 0.0, );
 
+    if (degree < 90) {
+      x = deg_tmp / 90.0;
+      y = tmp + (1.0 - (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+    } else if(degree < 180) {
+      y = 1.0 - (deg_tmp / 90.0);
+      x = tmp + (1.0 - (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+
+    } else if(degree < 270) {
+      y = (deg_tmp / -90.0);
+      x = tmp + (1.0 - (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+
+    } else if(degree < 360) {
+      x = 1.0 - (deg_tmp / 90.0);
+      y = -tmp + (-1.0 + (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+
+    } else if(degree < 450) {
+      x = -(deg_tmp / 90.0);
+      y = -tmp + (-1.0 + (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+
+    } else if(degree < 540) {
+      y = -1.0 + (deg_tmp / 90.0);
+      x = -tmp + (-1.0 + (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+
+    } else if(degree < 630) {
+      y = (deg_tmp / 90.0);
+      x = -tmp + (-1.0 + (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+
+    } else if(degree < 720) {
+      x = -1.0 + (deg_tmp / 90.0);
+      y = tmp + (1.0 - (deg_tmp/90.0));
+      transform.translate(x, y, 0.0);
+    }
+
+    std::cout << "Winkel: " << degree << " sinus: " << tmp << " x: " << x << " y: " << y << " ang: " << degree/90.0 << std::endl;
+#endif
+    transform.rotate(-degree, QVector3D::QVector3D(0.0, 0.0, 1.0));
     return transform;
 }
 
