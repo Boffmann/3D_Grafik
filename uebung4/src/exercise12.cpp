@@ -46,8 +46,8 @@ QMatrix4x4 Exercise12::rotateClockwise(int frame)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     QMatrix4x4 transform;
-#if 1
-    int degree = (frame/4) % 720;
+
+    int degree = (frame/3) % 720;
     float x;
     float y;
     int deg_tmp = degree % 90;
@@ -93,9 +93,6 @@ QMatrix4x4 Exercise12::rotateClockwise(int frame)
       y = tmp + (1.0 - (deg_tmp/90.0));
       transform.translate(x, y, 0.0);
     }
-
-    std::cout << "Winkel: " << degree << " sinus: " << tmp << " x: " << x << " y: " << y << " ang: " << degree/90.0 << std::endl;
-#endif
     transform.rotate(-degree, QVector3D::QVector3D(0.0, 0.0, 1.0));
     return transform;
 }
