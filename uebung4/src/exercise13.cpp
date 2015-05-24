@@ -19,6 +19,9 @@
 #include <QMatrix4x4>
 #include <QOpenGLShaderProgram>
 
+#include <math.h>
+#include <iostream>
+
 #include <glm/gtc/constants.hpp>
 #include <glm/vec3.hpp>
 #include <glm/geometric.hpp>
@@ -64,13 +67,44 @@ QMatrix4x4 Exercise13::applyBallTransformation(const int frame)
     //              end at      x = +2.0
     // - Apply matrices in the correct order, using matrix multiplication
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    float x = -2.0;
+    float y = 0.8;
+    int length = 1600 * (0.01/fX);
+    float distance = (float)(frame%length)/numFramesPerAnimation;
+    float radians = -((360 * distance)/(2.0 * r * M_PI)) * (M_PI/180.0);
+    float degrees = ((360 * distance)/(2.0 * r * M_PI));
+    float cos_r = cos(radians);
+    float sin_r = sin(radians);
+    float lambda1 = d/(2.0 * r);
+    float lambda2 = 1.0;
+    float lambda3 = 1.0;
 
-    // const QMatrix4x4 translate({..})
-    // const QMatrix4x4 rotate({..})
-    // const QMatrix4x4 scale({..})
-    // return ... * ... * ...;
+    x += distance;
+    if(x < -0.9) {  // leftcliff x
+    } else if(x <= 0.1) {  // 0.1 behind bottom x
+      y = -1.214285714 * x * x - 2.821428571 * x - 0.7757142857;
+      // parabel durch (-0.9, 0.8), (-0.6, 0.5), (0.1, -1.05)
+#if 0
+    } else if(x == 0.1) { // 0.1 behind bottom x
+      y = -1.214285714 * x * x - 2.821428571 * x - 0.7757142857;
+#endif
+    } else if(x < 0.9) { // right cliff x
+      y = -1.625 * x * x + 3.4375 * x - 1.3775;
+      // parabel durch (0.1, -1.05), (0.6, 0.1), (0.9, 0.4)
+    } else if(x < 2.0) {  // end x
+      y = 0.4;  // right cliff y
+    } else {
+      y = 0.4;  // right cliff y
+      x = 2.0;  // end x
+    }
 
-    return QMatrix4x4();
+    const QMatrix4x4 rotate({     cos_r, -sin_r, 0.0, 0.0,  sin_r, cos_r, 0.0, 0.0,   0.0, 0.0, 1.0, 0.0,       0.0, 0.0, 0.0, 1.0});
+    const QMatrix4x4 scale({      lambda1, 0.0, 0.0, 0.0,   0.0, lambda2, 0.0, 0.0,   0.0, 0.0, lambda3, 0.0,   0.0, 0.0, 0.0, 1.0});
+    const QMatrix4x4 translate({  1.0, 0.0, 0.0, x,         0.0, 1.0, 0.0, y + r,     0.0, 0.0, 1.0, 0.0,       0.0, 0.0, 0.0, 1.0});
+
+    if(x >= 0.09 && x <= 0.11) {  // auch skalieren
+      return translate * rotate * scale;
+    } else return translate * rotate;
 }
 
 void Exercise13::drawEnvironment()
