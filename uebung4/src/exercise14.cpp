@@ -23,6 +23,8 @@
 #include <QRectF>
 #include <QSettings>
 
+#include <iostream>
+
 #include <glm/trigonometric.hpp>
 
 #include "util/camera.h"
@@ -70,8 +72,18 @@ QMatrix4x4 Exercise14::interpolateEuler(const float t)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     QMatrix4x4 result;
-
+    float x;
+    float y;
+    float z;
+    lerp(x, m_angles0[0], m_angles1[0], t);
+    lerp(y, m_angles0[1], m_angles1[1], t);
+    lerp(z, m_angles0[2], m_angles1[2], t);
+    result.setToIdentity();
+    result.rotate(x, 1.0, 0.0, 0.0);
+    result.rotate(y, 0.0, 1.0, 0.0);
+    result.rotate(z, 0.0, 0.0, 1.0);
     return result;
+
 }
 
 QMatrix4x4 Exercise14::interpolateQuaternion(const float t)
@@ -85,8 +97,42 @@ QMatrix4x4 Exercise14::interpolateQuaternion(const float t)
     // - hint: use QMatrix4x4::rotate calls for applying the rotation(s)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    QMatrix4x4 result;
+    QMatrix4x4 start, ziel;
+    float startQuad[16], endQuad[16];
 
+    start.setToIdentity();
+    start.rotate(m_angles0[0],1,0,0);
+    start.rotate(m_angles0[1],0,1,0);
+    start.rotate(m_angles0[2],0,0,1);
+
+    ziel.setToIdentity();
+    ziel.rotate(m_angles1[0],1,0,0);
+    ziel.rotate(m_angles1[1],0,1,0);
+    ziel.rotate(m_angles1[2],0,0,1);
+#if 0
+    for(int i = 0;i < 4;i++) {
+      for(int j = 0;j < 4; j++) {
+        startQuad[i*4+j] = start(j,i);
+        endQuad[i*4+j] = ziel(j,i);
+      }
+    }
+#endif
+    start.copyDataTo(startQuad);
+    ziel.copyDataTo(endQuad);
+
+    float quatX[4], quatY[4], slerpQuat[4];
+    quat(quatX, startQuad);
+    quat(quatY, endQuad);
+
+    slerp(slerpQuat, quatX, quatY, t);
+
+    float angle;
+    float axis[3];
+    axisAngle(angle, axis, slerpQuat);
+
+    QMatrix4x4 result;
+    result.setToIdentity();
+    result.rotate(angle, axis[0], axis[1], axis[2]);
     return result;
 }
 
@@ -97,8 +143,47 @@ QMatrix4x4 Exercise14::interpolateMatrix(const float t)
     // - Interpolate between the elements of the matrices
     // - hint: use the lerp method (to be defined below)
     /////////////////////////////////////////////////////////////////////////////////////////////////
+#if 0
+    QMatrix4x4 result;
+    QMatrix4x4 matrix1;
+    QMatrix4x4 matrix2;
+    matrix1.setToIdentity();
+    matrix1.rotate(m_angles0[0], 1.0, 0.0, 0.0);
+    matrix1.rotate(m_angles0[1], 0.0, 1.0, 0.0);
+    matrix1.rotate(m_angles0[2], 0.0, 0.0, 1.0);
+    matrix2.setToIdentity();
+    matrix2.rotate(m_angles1[0], 1.0, 0.0, 0.0);
+    matrix2.rotate(m_angles1[1], 0.0, 1.0, 0.0);
+    matrix2.rotate(m_angles1[2], 0.0, 0.0, 1.0);
+    float data1[16];
+    float data2[16];
+    float *res;
+    res = result.data();
+    matrix1.copyDataTo(data1);
+    matrix2.copyDataTo(data2);
+    for(int i = 0; i < 16; ++i) {
+      lerp(res[i], data1[i], data2[i], t);
+    }
+    return result;
+#endif
+    QMatrix4x4 start, ziel;
+
+    start.setToIdentity();
+    start.rotate(m_angles0[0],1,0,0);
+    start.rotate(m_angles0[1],0,1,0);
+    start.rotate(m_angles0[2],0,0,1);
+
+    ziel.setToIdentity();
+    ziel.rotate(m_angles1[0],1,0,0);
+    ziel.rotate(m_angles1[1],0,1,0);
+    ziel.rotate(m_angles1[2],0,0,1);
 
     QMatrix4x4 result;
+    for(int i = 0; i < 4; i++) {
+      for(int j = 0; j < 4; j++) {
+        lerp(result(j,i),start(j,i),ziel(j,i), t);
+      }
+    }
 
     return result;
 }
@@ -114,6 +199,14 @@ void Exercise14::slerp(
     // - Implement the slerp function.
     // - Keep in mind, that sin(x) might equal zero. Handle that case appropriately.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    try {
+      for(int i = 0;i < 4; i++) {
+        float omega = acos(a[i] * b[i]);
+        result[i] = ((sin((1-t) * omega) / (sin(omega))) * a[i]) + ((sin(t * omega)) / (sin(omega)) * b[i]);
+      }
+    } catch(std::logic_error &e) {
+      std::cout << e.what() << std::endl;
+    }
 }
 
 void Exercise14::lerp(
@@ -126,6 +219,7 @@ void Exercise14::lerp(
     // TODO: Aufgabe 14
     // - Implement a linear interpolation between a and b as a function of t.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    result = (1-t) * a + t * b;
 }
 
 bool Exercise14::initialize()

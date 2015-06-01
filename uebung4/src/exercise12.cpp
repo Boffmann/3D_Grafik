@@ -46,37 +46,25 @@ QMatrix4x4 Exercise12::rotateClockwise(int frame)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     QMatrix4x4 transform;
-    int degree = (frame/2) % 720;
-    float x, y;
-    int deg_tmp = degree % 180;
-    float rad = deg_tmp * (M_PI/180.0);
-    float sine = sin(rad);
-    float cosine = cos(rad);
+    int degree = frame % 360;
     transform.setToIdentity();
-    const QMatrix4x4 rotate({cosine, -sine, 0.0, 0.0,  sine, cosine, 0.0, 0.0,   0.0, 0.0, 1.0, 0.0,       0.0, 0.0, 0.0, 1.0});
-    if(degree < 180) {
-      QVector4D rb({-0.5, -0.5, 0.0, 1.0});
-      rb = rotate * rb;
-      x = -rb.x() - 0.5;
-      y = -rb.y() + 0.5;
-    } else if (degree < 360) {
-      QVector4D rb({0.5, -0.5, 0.0, 1.0});
-      rb = rotate * rb;
-      x = -rb.x() - 0.5;
-      y = -rb.y() - 0.5;
-    } else if (degree < 540) {
-      QVector4D rb({0.5, 0.5, 0.0, 1.0});
-      rb = rotate * rb;
-      x = -rb.x() + 0.5;
-      y = -rb.y() - 0.5;
-    } else if (degree < 720) {
-      QVector4D rb({-0.5, 0.5, 0.0, 1.0});
-      rb = rotate * rb;
-      x = -rb.x() + 0.5;
-      y = -rb.y() + 0.5;
+    if(degree < 90) {
+      transform.translate(0.5, 0.5, 0.0);
+      transform.rotate(-2 * degree, 0.0, 0.0, 1.0);
+      transform.translate(-0.5, 0.5, 0.0);
+    } else if(degree < 180) {
+      transform.translate(0.5, -0.5, 0.0);
+      transform.rotate(-2 * degree, 0.0, 0.0, 1.0);
+      transform.translate(-0.5, -0.5, 0.0);
+    } else if(degree < 270) {
+      transform.translate(-0.5, -0.5, 0.0);
+      transform.rotate(-2 * degree, 0.0, 0.0, 1.0);
+      transform.translate(0.5, -0.5, 0.0);
+    } else if(degree < 360) {
+      transform.translate(-0.5, 0.5, 0.0);
+      transform.rotate(-2 * degree, 0.0, 0.0, 1.0);
+      transform.translate(0.5, 0.5, 0.0);
     }
-    transform.rotate(-degree, 0.0, 0.0, 0.1);
-    transform.translate(x, y, 0.0);
     return transform;
 }
 
