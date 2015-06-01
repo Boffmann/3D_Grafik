@@ -119,7 +119,6 @@ QMatrix4x4 Exercise13::applyBallTransformation(const int frame)
     const QMatrix4x4 scale(lambda1, 0.0, 0.0, 0.0,   0.0, lambda2, 0.0, 0.0,   0.0, 0.0, lambda3, 0.0,   0.0, 0.0, 0.0, 1.0);
     const QMatrix4x4 translate(1.0, 0.0, 0.0, x,   0.0, 1.0, 0.0, y + r,   0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0);
 
-    //return translate * rotate * scale;
     return translate * scale * rotate;
 }
 
