@@ -75,7 +75,7 @@ QMatrix4x4 Exercise12::rotateClockwise(int frame)
       x = -rb.x() + 0.5;
       y = -rb.y() + 0.5;
     }
-    transform.rotate(-degree, QVector3D::QVector3D(0.0, 0.0, 1.0));
+    transform.rotate(-degree, 0.0, 0.0, 0.1);
     transform.translate(x, y, 0.0);
     return transform;
 }
