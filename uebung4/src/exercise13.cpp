@@ -50,7 +50,7 @@ Exercise13::~Exercise13()
 
 QMatrix4x4 Exercise13::applyBallTransformation(const int frame)
 {
-    static const float fX = 0.01f;
+    static const float fX = 0.05f;
     static const int numFramesPerAnimation = static_cast<int>(4.0f / fX);
 
     static const float r = 0.3f;
@@ -71,51 +71,38 @@ QMatrix4x4 Exercise13::applyBallTransformation(const int frame)
     float y = 0.8;
     int length = 1600 * (0.01/fX);
     float distance = (float)(frame%length)/numFramesPerAnimation;
+    float radians = -((360 * distance)/(2.0 * r * M_PI)) * (M_PI/180.0);  // - so it turns the right way
+    float cosine = cos(radians);
+    float sine = sin(radians);
     float lambda1 = 1.0;
     float lambda2 = 1.0;
     float lambda3 = 1.0;
-    float val;
     float fac;
+    float transformvalue;
+    transformvalue = d/(2.0*r);
+    //transformvalue = 0.5;
+    //transformvalue = 1.0 - (d/(2.0*r));
+    // keine Ahnung ob um d stauchen heisst auf d oder 1-d skalieren
 
     x += distance;
-    if(x >= 0.10 && !(x > 0.40)) {
-      // stauchung von 0.10 bis 0.40
-      fac = (x - 0.1) / 0.3;
-      val = (1.0-fac) * 1.0 + fac * (d/2.0*r);
-      x = 0.1;
-    } else if(x >= 0.40 && !(x > 0.70)) {
-      // anti stauchung von 0.40 bis 0.70
-      fac = (x - 0.4) / 0.3;
-      val = (1.0-fac) * (d/2.0*r) + fac * 1.0;
-    }
-    if(x >= 0.4)
-      x -= 0.3;
-    // stauchung an achsen der kugel
-    // not sure wie man die lambda berechnen soll
-    // lambda2 = val * sin(winkel);
-    // lambda1 = sqrt(val*val - lambda2 * lambda2);
-    // hat nicht funktioniert
-
-#if 0
     if(x >= 0.10 && !(x > 0.15)) {
       // stauchung von 0.10 bis 0.15
       fac = (x - 0.1) / 0.05;
-      lambda2 = (1.0-fac) * 1.0 + fac * (d/2.0*r);
+      lambda2 = (1.0-fac) + fac * transformvalue;
       x = 0.1;
     } else if(x >= 0.15 && !(x > 0.20)) {
       // anti stauchung von 0.15 bis 0.2
       fac = (x - 0.15) / 0.05;
-      lambda2 = (1.0-fac) * (d/2.0*r) + fac * 1.0;
+      lambda2 = (1.0-fac) * transformvalue + fac;
     }
-    if(x > 0.15) x -= 0.05;
-#endif
+
+    if(x >= 0.15) x-= 0.05;
 
     if(x >= -0.9 && x < 0.1) {  // -0.9 leftcliff / 0.1 behind bottom x
       y = -(27.0/16.0) * x * x - (16.0/5.0) * x - (1141.0/1600.0);
       // (-0.9,0.8) > (-0.7,0.7) > (0.1,-1.05)
     }
     if (x == 0.1) {
-      // y = -1.05 - (fac * 0.15 * r);
       y = -1.05;
     }
     if(x > 0.1 && x < 0.9) { // 0.1 behind bottom x / right cliff x
@@ -126,16 +113,15 @@ QMatrix4x4 Exercise13::applyBallTransformation(const int frame)
       y = 0.4;  // right cliff y
     }
 
-    float radians = -((360 * (x + 2.0))/(2.0 * r * M_PI)) * (M_PI/180.0);  // - so it turns the right way
-    // x -> no rotation while scaling at x = 0.1
-    float cosine = cos(radians);
-    float sine = sin(radians);
+    y -= (1.0 - lambda2) * r;
+    // den skalierten radius abziehen
 
     const QMatrix4x4 rotate(cosine, -sine, 0.0, 0.0,   sine, cosine, 0.0, 0.0,    0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0);
     const QMatrix4x4 scale(lambda1, 0.0, 0.0, 0.0,   0.0, lambda2, 0.0, 0.0,   0.0, 0.0, lambda3, 0.0,   0.0, 0.0, 0.0, 1.0);
     const QMatrix4x4 translate(1.0, 0.0, 0.0, x,   0.0, 1.0, 0.0, y + r,   0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0);
 
-    return translate * rotate * scale;
+    //return translate * rotate * scale;
+    return translate * scale * rotate;
 }
 
 void Exercise13::drawEnvironment()
