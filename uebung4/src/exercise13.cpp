@@ -20,7 +20,6 @@
 #include <QOpenGLShaderProgram>
 
 #include <math.h>
-#include <iostream>
 
 #include <glm/gtc/constants.hpp>
 #include <glm/vec3.hpp>
