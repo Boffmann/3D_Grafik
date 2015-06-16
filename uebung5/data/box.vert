@@ -40,6 +40,8 @@ vec3 mold(vec3 v, float moldPlateau)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
+    float tmp = atan(v.y, v.x) / (radians(180)); // radians(180) == PI
+    float tmp2
     return v;
 }
 
@@ -55,7 +57,16 @@ vec3 pinch(vec3 v, float pinchPlateau)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    return v;
+    // height interpolation factor
+    float a = v.y / overallObjectDimensions.y;
+
+    // pinch value by interpolation with max pinch
+    float x_tmp = (1.0 - (1.0 - pinchPlateau)) * v.x;
+
+    // interpolation (higher -> more pinch)
+    float x = (1.0 - a) * v.x + a * x_tmp;
+
+    return vec3(x, v.y, v.z);
 }
 
 vec3 twist(vec3 v, float maxAngle)
@@ -68,7 +79,18 @@ vec3 twist(vec3 v, float maxAngle)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    return v;
+    // interpolation factor (height)
+    float a = v.y / overallObjectDimensions.y;
+
+    // rotation angle
+    float theta = maxAngle * a;
+
+    // multiply vector with rotation matrix
+    float x = v.x * cos(theta) + v.z * -1 * sin(theta);
+    float y = v.y;
+    float z = v.x * sin(theta) + v.z * cos(theta);
+
+    return vec3(x, y, z);
 }
 
 vec3 bend(vec3 v, float maxAngle)
