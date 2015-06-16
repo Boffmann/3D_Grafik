@@ -39,10 +39,13 @@ vec3 mold(vec3 v, float moldPlateau)
     // Tip: Use overallObjectDimensions to get the extents of the x, y and z dimension
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    float deform_fac = 1.0 - moldPlateau;
+    float a = atan(v.z, v.x) / radians(180);
 
-    float tmp = atan(v.y, v.x) / (radians(180)); // radians(180) == PI
-    float tmp2
-    return v;
+    float x = (1.0 - a) * v.x + a * deform_fac;
+    float z = (1.0 - a) * v.z + a * deform_fac;
+
+    return vec3(x, v.y, z);
 }
 
 vec3 pinch(vec3 v, float pinchPlateau)
@@ -57,15 +60,10 @@ vec3 pinch(vec3 v, float pinchPlateau)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // height interpolation factor
     float a = v.y / overallObjectDimensions.y;
+    float deform_fac = 1.0 - pinchPlateau;
 
-    // pinch value by interpolation with max pinch
-    float x_tmp = (1.0 - (1.0 - pinchPlateau)) * v.x;
-
-    // interpolation (higher -> more pinch)
-    float x = (1.0 - a) * v.x + a * x_tmp;
-
+    float x = v.x * (1.0 - deform_fac * a);
     return vec3(x, v.y, v.z);
 }
 
@@ -83,14 +81,13 @@ vec3 twist(vec3 v, float maxAngle)
     float a = v.y / overallObjectDimensions.y;
 
     // rotation angle
-    float theta = maxAngle * a;
+    float angle = maxAngle * a;
 
     // multiply vector with rotation matrix
-    float x = v.x * cos(theta) + v.z * -1 * sin(theta);
-    float y = v.y;
-    float z = v.x * sin(theta) + v.z * cos(theta);
+    float x = v.x * cos(angle) - v.z * sin(angle);
+    float z = v.x * sin(angle) + v.z * cos(angle);
 
-    return vec3(x, y, z);
+    return vec3(x, v.y, z);
 }
 
 vec3 bend(vec3 v, float maxAngle)
@@ -103,7 +100,13 @@ vec3 bend(vec3 v, float maxAngle)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    return v;
+    float a = v.y / overallObjectDimensions.y;
+    float angle = maxAngle * a;
+
+    float y = v.y * cos(angle) - v.x * sin(angle);
+    float x = v.y * sin(angle) + v.x * cos(angle);
+
+    return vec3(x, y, v.z);
 }
 
 void main()
