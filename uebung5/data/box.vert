@@ -40,11 +40,9 @@ vec3 mold(vec3 v, float moldPlateau)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
     float deform_fac = 1.0 - moldPlateau;
-    float a = atan(v.z, v.x) / radians(180);
-
-    float x = (1.0 - a) * v.x + a * deform_fac;
-    float z = (1.0 - a) * v.z + a * deform_fac;
-
+    float a = abs(atan(v.z, v.x) / radians(180));
+    float x = (1.0 - deform_fac * a) * v.x;
+    float z = (1.0 - deform_fac * a) * v.z;
     return vec3(x, v.y, z);
 }
 
@@ -59,11 +57,11 @@ vec3 pinch(vec3 v, float pinchPlateau)
     // Tip: Use overallObjectDimensions to get the extents of the x, y and z dimension
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    float a = v.y / overallObjectDimensions.y;
+    float offset = overallObjectDimensions.y / 2;
+    float a = (v.y + offset) / overallObjectDimensions.y;
     float deform_fac = 1.0 - pinchPlateau;
 
-    float x = v.x * (1.0 - deform_fac * a);
+    float x = (1.0 - a * deform_fac) * v.x;
     return vec3(x, v.y, v.z);
 }
 
@@ -78,7 +76,8 @@ vec3 twist(vec3 v, float maxAngle)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     // interpolation factor (height)
-    float a = v.y / overallObjectDimensions.y;
+    float offset = overallObjectDimensions.y / 2;
+    float a = (v.y + offset) / overallObjectDimensions.y;
 
     // rotation angle
     float angle = maxAngle * a;
@@ -100,7 +99,8 @@ vec3 bend(vec3 v, float maxAngle)
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    float a = v.y / overallObjectDimensions.y;
+    float offset = overallObjectDimensions.y / 2;
+    float a = (v.y + offset) / overallObjectDimensions.y;
     float angle = maxAngle * a;
 
     float y = v.y * cos(angle) - v.x * sin(angle);

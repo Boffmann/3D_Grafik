@@ -45,9 +45,16 @@ void Exercise16::setupViews()
     // Define different views (via the lookAt()-method) for the orthogonal projection
     // Use [1] to [7] to switch cameras (1: perspective, 2-7: orthogonal).
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // m_views[0].lookAt(..);
-    // ...
+    // eye, center, up
+#if 1
+    // +x, -x, +y, -y, +z, -z
+    m_views[2].lookAt(QVector3D (1.0, 0.0, 0.0), QVector3D (0.0, 0.5, 0.0), QVector3D (0.0, 1.0, 0.0));
+    m_views[3].lookAt(QVector3D (-1.0, 0.0, 0.0), QVector3D (0.0, 0.5, 0.0), QVector3D (0.0, 1.0, 0.0));
+    m_views[4].lookAt(QVector3D (0.0, 1.0, 0.0), QVector3D (0.0, 0.0, 0.0), QVector3D (0.0, 0.0, 1.0));
+    m_views[5].lookAt(QVector3D (0.0, -1.0, 0.0), QVector3D (0.0, 0.0, 0.0), QVector3D (0.0, 0.0, 1.0));
+    m_views[6].lookAt(QVector3D (0.0, 0.0, 1.0), QVector3D (0.0, 0.0, 0.0), QVector3D (0.0, 1.0, 0.0));
+    m_views[7].lookAt(QVector3D (0.0, 0.0, -1.0), QVector3D (0.0, 0.0, 0.0), QVector3D (0.0, 1.0, 0.0));
+#endif
 }
 
 void Exercise16::resize(int width, int height)
@@ -59,6 +66,14 @@ void Exercise16::resize(int width, int height)
     // Setup a correct orthogonal projection via the ortho()-method of QMatrix4x4.
     // Find appropriate values for near and farplane. Keep the aspect ratio in mind.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    float left = width/(-2.0);
+    float right = width/(2.0);
+    float bottom = height/(-2.0);
+    float top = height/(2.0);
+    float nearPlane = 0.0;
+    float farPlane = 0.0;
+    m_orthoProjection.ortho(left, right, bottom, top, nearPlane, farPlane);
+
 }
 
 const QString Exercise16::hints() const
