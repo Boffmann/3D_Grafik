@@ -11,8 +11,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775014
+// Matr.-Nr: 775165
 //
 // ======================================
 
@@ -31,6 +31,6 @@ void main()
     // TODO: Aufgabe 18, part 5
     // Adjust the color depending on the depth of the vertex.
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
     out_color = vec4(color.xyz, color.w);
+    out_color = (1.0 + vertex.z) * out_color;
 }

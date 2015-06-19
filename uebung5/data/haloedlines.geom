@@ -11,8 +11,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775014
+// Matr.-Nr: 775165
 //
 // ======================================
 
@@ -23,7 +23,7 @@ layout (triangles) in;
 // Adjust the primitive type and number of max_vertices to create lines.
 // Tip: Use primitive type "line_strip"
 /////////////////////////////////////////////////////////////////////////////////////////////////
-layout (triangle_strip, max_vertices = 3) out;
+layout (line_strip, max_vertices = 3) out;
 
 uniform mat4 viewprojection;
 uniform float animationFrame;

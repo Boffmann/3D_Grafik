@@ -9,8 +9,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775014
+// Matr.-Nr: 775165
 //
 // ======================================
 
@@ -58,7 +58,8 @@ bool Exercise18::initialize()
     // Setup appropriate depth test to draw the given geometry as haloed lines.
     // Tip: Activate depth test as well as use glDepthFunc().
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL); // less or equal
     return true;
 }
 
@@ -82,14 +83,12 @@ void Exercise18::render()
     // Tip: Use glColorMask(), glLineWidth(), m_drawable->draw(*this)
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
+    glColorMask(false, false, false, false); //r, g, b, a
+    glLineWidth(8.0*m_animationFrame);
+    m_drawable->draw(*this);
 
-    // pass 1
-    //glLineWidth(...);
+    glColorMask(true, true, true, true);
+    glLineWidth(3.0*m_animationFrame);
+    m_drawable->draw(*this);
 
-    //m_drawable->draw(*this);
-
-    // pass 2
-    //glLineWidth(...);
-
-    //m_drawable->draw(*this);
 }
