@@ -40,19 +40,27 @@ void main()
     for (int i=0; i < 3; ++i) {
         normal = normalize(geom_normal[i]);
         vertex = gl_in[i].gl_Position;
-        gl_Position = viewprojection * vertex;
 
         float angle = radians(360) * animationFrame;
         float c = cos(angle);
         float s = sin(angle);
-        float x = ((1-c) * normal.x * normal.x + c) * vertex.x + ((1-c) * normal.x * normal.y - normal.z * s) * vertex.y + ((1-c) * normal.x * normal.z + normal.y * s) * vertex.z;
-        float y = ((1-c) * normal.x * normal.x + c) * vertex.x + ((1-c) * normal.x * normal.y - normal.z * s) * vertex.y + ((1-c) * normal.x * normal.z + normal.y * s) * vertex.z;
-        float z = ((1-c) * normal.x * normal.x + c) * vertex.x + ((1-c) * normal.x * normal.y - normal.z * s) * vertex.y + ((1-c) * normal.x * normal.z + normal.y * s) * vertex.z;
-        // mat4 rot = mat4((1-c) * normal.x * normal.x + c), (1-c) * normal.x * normal.x + c), (1-c) * normal.x * normal.x + c), 0.0, (1-c) * normal.x * normal.y - normal.z * s), (1-c) * normal.x * normal.y - normal.z * s), (1-c) * normal.x * normal.y - normal.z * s), 0.0, (1-c) * normal.x * normal.z + normal.y * s), (1-c) * normal.x * normal.z + normal.y * s), (1-c) * normal.x * normal.z + normal.y * s), 0.0, 0.0, 0.0, 0.0, 1.0)
-        x += animationFrame * normal.x;
-        y += animationFrame * normal.y;
-        z += animationFrame * normal.z;
-        vertex = vec4(x, y, z, 1.0);
+
+        vec4 rot_c1 = vec4((1.0-c) * normal.x * normal.x + c, (1.0-c) * normal.x * normal.y + normal.z * s, (1.0-c) * normal.x * normal.z - normal.y * s, 0.0);
+        vec4 rot_c2 = vec4((1.0-c) * normal.x * normal.y - normal.z * s, (1.0-c) * normal.y * normal.y + c, (1.0-c) * normal.y * normal.z + normal.x * s, 0.0);
+        vec4 rot_c3 = vec4((1.0-c) * normal.x * normal.z + normal.y * s, (1.0-c) * normal.y * normal.z - normal.x * s, (1.0-c) * normal.z * normal.z + c, 0.0);
+        vec4 rot_c4 = vec4(0.0, 0.0, 0.0, 1.0);
+        mat4 rot = mat4(rot_c1, rot_c2, rot_c3, rot_c4);
+
+        vec3 scal = animationFrame * normal;
+        vec4 trans_c1 = vec4(1.0, 0.0, 0.0, 0.0);
+        vec4 trans_c2 = vec4(0.0, 1.0, 0.0, 0.0);
+        vec4 trans_c3 = vec4(0.0, 0.0, 1.0, 0.0);
+        vec4 trans_c4 = vec4(vec3(0.0, 0.0, 0.0), 1.0);
+        mat4 trans = mat4(trans_c1, trans_c2, trans_c3, trans_c4);
+
+//        vertex = vertex * trans * rot;
+        gl_Position = viewprojection * vertex;
+
         EmitVertex();
     }
 
