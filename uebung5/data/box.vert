@@ -41,9 +41,8 @@ vec3 mold(vec3 v, float moldPlateau)
     /////////////////////////////////////////////////////////////////////////////////////////////////
     float deform_fac = 1.0 - moldPlateau;
     float a = abs(atan(v.z, v.x) / radians(180));
-    float x = (1.0 - deform_fac * a) * v.x;
     float z = (1.0 - deform_fac * a) * v.z;
-    return vec3(x, v.y, z);
+    return vec3(v.x, v.y, z);
 }
 
 vec3 pinch(vec3 v, float pinchPlateau)
