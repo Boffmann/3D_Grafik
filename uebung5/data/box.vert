@@ -39,9 +39,19 @@ vec3 mold(vec3 v, float moldPlateau)
     // Tip: Use overallObjectDimensions to get the extents of the x, y and z dimension
     // Tip: Keep in mind that the box is located in the coordinate system origin
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    float z = v.z;
     float deform_fac = 1.0 - moldPlateau;
-    float a = abs(atan(v.z, v.x) / radians(180));
-    float z = (1.0 - deform_fac * a) * v.z;
+    float a = atan(v.x, v.z) / radians(180);
+    a = abs(a);
+    if (v.z > 0)  {
+      z *= (1.0 - deform_fac * a);
+    } else {
+      // richtige deformation, faengt aber bei z = 0, daher + ...
+      //z = (deform_fac * a * z) + ((1.0 - deform_fac) * z);
+
+      // umgeformt
+      z *= deform_fac * (a - 1.0) + 1.0;
+    }
     return vec3(v.x, v.y, z);
 }
 
