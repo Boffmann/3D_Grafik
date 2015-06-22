@@ -15,7 +15,7 @@
 // ======================================
 
 #include "exercise16.h"
-
+#include "iostream"
 #include <cassert>
 #include <QKeyEvent>
 #include <QMatrix4x4>
@@ -50,12 +50,26 @@ void Exercise16::setupViews()
     // +x, -x, +y, -y, +z, -z
     QVector3D center(0.0, 0.0, 0.0);
     QVector3D up_y(0.0, 1.0, 0.0);
-    m_views[2].lookAt(QVector3D(1.0, 0.0, 0.0),   center, up_y);
-    m_views[3].lookAt(QVector3D(-1.0, 0.0, 0.0),  center, up_y);
-    m_views[4].lookAt(QVector3D(0.0, 1.0, 0.0),   center, up_y);
-    m_views[5].lookAt(QVector3D(0.0, 1.0, 0.0),   center, up_y);
-    m_views[6].lookAt(QVector3D(0.0, 0.0, 1.0),   center, up_y);
-    m_views[7].lookAt(QVector3D(0.0, 0.0, -1.0),  center, up_y);
+    QVector3D down_z(0.0, 0.0, -1.0);
+
+    // button 2, right (+x)
+    m_views[0].lookAt(QVector3D(1.0, 0.0, 0.0),   center, up_y);
+
+    // button 3, left (-x)
+    m_views[1].lookAt(QVector3D(-1.0, 0.0, 0.0),   center, up_y);
+
+    // button 4, top (+y)
+    m_views[2].lookAt(QVector3D(0.0, 1.0, 0.0),   center, down_z);
+
+    // button 5, bottom (-y)
+    m_views[3].lookAt(QVector3D(0.0, -1.0, 0.0),  center, down_z);
+
+    // button 6, front (+z)
+    m_views[4].lookAt(QVector3D(0.0, 0.0, 1.0),   center, up_y);
+
+    // button 7, back (-z)
+    m_views[5].lookAt(QVector3D(0.0, 0.0, -1.0),   center, up_y);
+
 }
 
 void Exercise16::resize(int width, int height)
@@ -68,12 +82,23 @@ void Exercise16::resize(int width, int height)
     // Find appropriate values for near and farplane. Keep the aspect ratio in mind.
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    float left = width/(-2.0);
-    float right = width/(2.0);
-    float bottom = height/(-2.0);
-    float top = height/(2.0);
-    float nearPlane = 0.0;
-    float farPlane = 0.0;
+    float aspectratio = (float)width/height;
+    float left = -1.0;
+    float right = 1.0;
+    float bottom = -1.0;
+    float top = 1.0;
+    float nearPlane = -1.5;
+    float farPlane = 1.0;
+
+    if(aspectratio < 0.5) aspectratio = 1;
+    if(width <= height) {
+      bottom /= aspectratio;
+      top /= aspectratio;
+    } else {
+      left *= aspectratio;
+      right *= aspectratio;
+    }
+
     m_orthoProjection.ortho(left, right, bottom, top, nearPlane, farPlane);
 
 }
