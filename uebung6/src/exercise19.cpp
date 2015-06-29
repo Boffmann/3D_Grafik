@@ -9,8 +9,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775014
+// Matr.-Nr: 775165
 //
 // ======================================
 
@@ -54,11 +54,13 @@ void errorCallback(GLenum errorCode)
 void beginCallback(GLenum prim)
 {
     //TODO
+    glBegin(prim);
 }
 
 void vertexCallback(void * vdata)
 {
     //TODO
+    glVertex3dv((GLdouble *)vdata);
 }
 
 void combineCallback(double coords[3], double vertex_data[4], float weight[4], double **dataOut)
@@ -72,6 +74,7 @@ void combineCallback(double coords[3], double vertex_data[4], float weight[4], d
 void endCallback(void)
 {
     //TODO
+    glEnd();
 }
 
 
@@ -94,8 +97,9 @@ void Exercise19::render()
     glPushMatrix();
 
     //TODO use these
-    //drawContours();
-    //tessellatePolygons();
+    drawContours();
+    tessellatePolygons();
+
 
     glPopMatrix();
 }
@@ -159,6 +163,25 @@ void Exercise19::drawContours()
 void Exercise19::tessellatePolygons()
 {
     //TODO
+    GLUtesselator* tess = gluNewTess();
+    gluTessCallback(tess, GLU_TESS_BEGIN, (void (*) ()) &beginCallback);
+    gluTessCallback(tess, GLU_TESS_VERTEX, (void (*) ()) &vertexCallback);
+    gluTessCallback(tess, GLU_TESS_END, (void (*) ()) &endCallback);
+
+    gluTessBeginPolygon(tess, NULL);
+    for(auto i = m_contours.begin(); i != m_contours.end(); ++i) {
+      gluTessBeginContour(tess);
+      for(auto j = i->begin(); j != i->end(); ++j) {
+        GLdouble data[3];
+        data[0] = j->x;
+        data[1] = j->y;
+        data[2] = j->z;
+        gluTessVertex(tess, data, data);
+      }
+      gluTessEndContour(tess);
+    }
+    gluTessEndPolygon(tess);
+
 }
 
 bool Exercise19::onMouseReleased(QMouseEvent * mouseEvent)
