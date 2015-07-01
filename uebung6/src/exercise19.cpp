@@ -45,7 +45,6 @@ namespace
     GLenum g_primitive; // Current primitive type
 }
 
-
 void errorCallback(GLenum errorCode)
 {
     qWarning() << "Tessellation Error: " << gluErrorString(errorCode);
@@ -97,9 +96,12 @@ void Exercise19::render()
     glPushMatrix();
 
     //TODO use these
+    //drawContours();
+    //tessellatePolygons();
+
+    //tessellatePolygons();
     drawContours();
     tessellatePolygons();
-
 
     glPopMatrix();
 }
@@ -163,11 +165,14 @@ void Exercise19::drawContours()
 void Exercise19::tessellatePolygons()
 {
     //TODO
+
     GLUtesselator* tess = gluNewTess();
-    gluTessCallback(tess, GLU_TESS_BEGIN, (void (*) ()) &beginCallback);
     gluTessCallback(tess, GLU_TESS_VERTEX, (void (*) ()) &vertexCallback);
+    gluTessCallback(tess, GLU_TESS_BEGIN, (void (*) ()) &beginCallback);
     gluTessCallback(tess, GLU_TESS_END, (void (*) ()) &endCallback);
 
+
+#if 1
     gluTessBeginPolygon(tess, NULL);
     for(auto i = m_contours.begin(); i != m_contours.end(); ++i) {
       gluTessBeginContour(tess);
@@ -181,7 +186,8 @@ void Exercise19::tessellatePolygons()
       gluTessEndContour(tess);
     }
     gluTessEndPolygon(tess);
-
+    gluDeleteTess(tess);
+#endif
 }
 
 bool Exercise19::onMouseReleased(QMouseEvent * mouseEvent)

@@ -9,8 +9,8 @@
 // Diese Datei bearbeiten.
 //
 // Bearbeiter
-// Matr.-Nr: xxxxx
-// Matr.-Nr: xxxxx
+// Matr.-Nr: 775014
+// Matr.-Nr: 775165
 //
 // ======================================
 
@@ -24,6 +24,7 @@
 // cgal
 #include <CGAL/Subdivision_method_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
+
 
 typedef Polyhedron::Halfedge_around_facet_circulator HF_circulator;
 typedef Kernel::Point_3 Point_3;
@@ -117,6 +118,93 @@ Polyhedron Exercise20::createMesh()
     // using the API of the Polyhedron_incremental_builder_3. Both the icosahedron and the
     // tetrahedron should be centered to the origin.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    if(m_polyhedronMode == PolyhedronMode::ICOSAHEDRON) {
+      float r = (1 + sqrt(5))/2.0;
+
+      int n_vert = 12;
+      int n_fac = 20;
+
+      float vertices[n_vert][3] = { 0.0, 1.0, r,      // 0
+                                    0.0, 1.0, -r,     // 1
+                                    0.0, -1.0, r,     // 2
+                                    0.0, -1.0, -r,    // 3
+
+                                    1.0, r, 0.0,      // 4
+                                    1.0, -r, 0.0,     // 5
+                                    -1.0, r, 0.0,     // 6
+                                    -1.0, -r, 0.0,    // 7
+
+                                    r, 0.0, 1.0,      // 8
+                                    r, 0.0, -1.0,     // 9
+                                    -r, 0.0, 1.0,     // 10
+                                    -r, 0.0, -1.0 };  // 11
+
+      float facets[n_fac][3] = { 8, 5, 9,
+                                 8, 9, 4,
+                                 8, 4, 0,
+                                 8, 0, 2,
+                                 8, 2, 5,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0,
+                                 0, 0, 0 };
+
+      builder.begin_surface(n_vert, n_fac, (n_vert + n_fac - 2) * 2); // vertices, facets, halfedges
+
+      for(int i = 0; i < n_vert; ++i) {
+        builder.add_vertex(Point_3(vertices[i][0], vertices[i][1], vertices[i][2]));
+      }
+
+      for(int i = 0; i < n_fac; ++i) {
+        builder.begin_facet();
+        for(int j = 0; j < 3; ++j) {
+          builder.add_vertex_to_facet(facets[i][j]); // index of add_vertex
+        }
+        builder.end_facet();
+      }
+      builder.end_surface();
+
+    } else if(m_polyhedronMode == PolyhedronMode::TETRAHEDRON) {
+
+      int n_fac = 4;
+      int n_vert = 4;
+
+      float vertices[n_vert][3] = { 1.0, 1.0, 1.0,
+                                    1.0, -1.0, -1.0,
+                                    -1.0, 1.0, -1.0,
+                                    -1.0, -1.0, 1.0 };
+
+      float facets[n_fac][3] = { 0, 1, 2,
+                                 0, 1, 3,
+                                 0, 2, 3,
+                                 1, 2, 3 };
+
+      builder.begin_surface(n_vert, n_fac, (n_vert + n_fac - 2) * 2); // vertices, facets, halfedges
+
+      for(int i = 0; i < n_vert; ++i) {
+        builder.add_vertex(Point_3(vertices[i][0], vertices[i][1], vertices[i][2]));
+      }
+
+      for(int i = 0; i < n_fac; ++i) {
+        builder.begin_facet();
+        for(int j = 0; j < 3; ++j) {
+          builder.add_vertex_to_facet(facets[i][j]); // index of add_vertex
+        }
+        builder.end_facet();
+      }
+      builder.end_surface();
+    }
 
     return poly;
 }
