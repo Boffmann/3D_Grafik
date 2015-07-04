@@ -188,9 +188,9 @@ Polyhedron Exercise20::createMesh()
                                     -1.0, -1.0, 1.0 };
 
       float facets[n_fac][3] = { 0, 1, 2,
-                                 0, 1, 3,
+                                 0, 3, 1,
                                  0, 2, 3,
-                                 1, 2, 3 };
+                                 1, 3, 2 };
 
       builder.begin_surface(n_vert, n_fac, (n_vert + n_fac - 2) * 2); // vertices, facets, halfedges
 
@@ -257,12 +257,10 @@ void Exercise20::prepareMesh(Polyhedron& poly)
         m_verticesRaw.push_back(curr);
 
         // facet normal
-        //Point_3 p3_norm = i->facet()->normal();
         Point_3 p3_prev = i->prev()->vertex()->point();
         Point_3 p3_next = i->next()->vertex()->point();
         glm::vec3 prev(p3_prev.x(), p3_prev.y(), p3_prev.z());
         glm::vec3 next(p3_next.x(), p3_next.y(), p3_next.z());
-
         glm::vec3 normal = cross(curr - prev, next - curr);
         m_normalsRaw.push_back(normalize(normal));
 
