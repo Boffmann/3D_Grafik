@@ -118,11 +118,12 @@ Polyhedron Exercise20::createMesh()
     // using the API of the Polyhedron_incremental_builder_3. Both the icosahedron and the
     // tetrahedron should be centered to the origin.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+
     if(m_polyhedronMode == PolyhedronMode::ICOSAHEDRON) {
       float r = (1 + sqrt(5))/2.0;
 
-      int n_vert = 12;
-      int n_fac = 20;
+      const int n_vert = 12;
+      const int n_fac = 20;
 
       float vertices[n_vert][3] = { 0.0, 1.0, r,      // 0
                                     0.0, 1.0, -r,     // 1
@@ -139,26 +140,26 @@ Polyhedron Exercise20::createMesh()
                                     -r, 0.0, 1.0,     // 10
                                     -r, 0.0, -1.0 };  // 11
 
-      float facets[n_fac][3] = { 8, 5, 9,
-                                 8, 9, 4,
-                                 8, 4, 0,
-                                 8, 0, 2,
-                                 8, 2, 5,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0 };
+      float facets[n_fac][3] = { 0, 2, 10,
+                                 0, 2, 8,
+                                 0, 6, 10,
+                                 0, 4, 6,
+                                 0, 4, 8,
+                                 4, 9, 8,
+                                 4, 6, 1,
+                                 4, 1, 9,
+                                 10, 11, 6,
+                                 11, 6, 1,
+                                 1, 3, 9,
+                                 1, 11, 3,
+                                 3, 9, 5,
+                                 9, 5, 8,
+                                 8, 5, 2,
+                                 7, 11, 3,
+                                 7, 11, 10,
+                                 7, 2, 10,
+                                 7, 2, 5,
+                                 7, 3, 5 };
 
       builder.begin_surface(n_vert, n_fac, (n_vert + n_fac - 2) * 2); // vertices, facets, halfedges
 
@@ -177,8 +178,9 @@ Polyhedron Exercise20::createMesh()
 
     } else if(m_polyhedronMode == PolyhedronMode::TETRAHEDRON) {
 
-      int n_fac = 4;
-      int n_vert = 4;
+
+      const int n_fac = 4;
+      const int n_vert = 4;
 
       float vertices[n_vert][3] = { 1.0, 1.0, 1.0,
                                     1.0, -1.0, -1.0,
@@ -207,6 +209,7 @@ Polyhedron Exercise20::createMesh()
     }
 
     return poly;
+
 }
 
 void Exercise20::prepareMesh(Polyhedron& poly)
