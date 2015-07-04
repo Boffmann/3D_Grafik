@@ -250,6 +250,22 @@ void Exercise20::prepareMesh(Polyhedron& poly)
 
     for(auto i = poly.halfedges_begin(); i != poly.halfedges_end(); ++i) {
 
+        // vertex
+        Point_3 p3_curr = i->vertex()->point();
+        glm::vec3 curr(p3_curr.x(), p3_curr.y(), p3_curr.z());
+        curr *= 2;
+        m_verticesRaw.push_back(curr);
+
+        // facet normal
+        //Point_3 p3_norm = i->facet()->normal();
+        Point_3 p3_prev = i->prev()->vertex()->point();
+        Point_3 p3_next = i->next()->vertex()->point();
+        glm::vec3 prev(p3_prev.x(), p3_prev.y(), p3_prev.z());
+        glm::vec3 next(p3_next.x(), p3_next.y(), p3_next.z());
+
+        glm::vec3 normal = cross(curr - prev, next - curr);
+        m_normalsRaw.push_back(normalize(normal));
+
     }
 
 }
