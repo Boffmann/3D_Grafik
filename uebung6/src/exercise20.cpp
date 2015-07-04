@@ -176,7 +176,7 @@ Polyhedron Exercise20::createMesh()
       }
       builder.end_surface();
 
-    } else if(m_polyhedronMode == PolyhedronMode::TETRAHEDRON) {
+    } else {
 
 
       const int n_fac = 4;
@@ -221,13 +221,16 @@ void Exercise20::prepareMesh(Polyhedron& poly)
     // an appropriate constant factor, e.g., 8.
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
+    int steps = m_animationFrame * 8;
     if(m_subdivisionMode == SubdivisionMode::MODE_A)
     {
-        // TODO method A
+        // TODO method A - loop
+        CGAL::Subdivision_method_3::Loop_subdivision(poly, steps);
     }
     else
     {
-        // TODO method B
+        // TODO method B - sqrt3
+        CGAL::Subdivision_method_3::Sqrt3_subdivision(poly, steps);
     }
 
     std::transform(poly.facets_begin(), poly.facets_end(), poly.planes_begin(),
@@ -244,6 +247,11 @@ void Exercise20::prepareMesh(Polyhedron& poly)
     // The normals are defined per face. Thus, each vertex uses the face normal of its corresponding face.
     // Keep in mind, that the vertex and normal arrays use different point types than CGAL.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    for(auto i = poly.halfedges_begin(); i != poly.halfedges_end(); ++i) {
+
+    }
+
 }
 
 void Exercise20::setAnimationFrame(const float animationFrame)
