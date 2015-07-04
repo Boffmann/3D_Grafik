@@ -178,7 +178,6 @@ Polyhedron Exercise20::createMesh()
 
     } else {
 
-
       const int n_fac = 4;
       const int n_vert = 4;
 
@@ -206,6 +205,7 @@ Polyhedron Exercise20::createMesh()
         builder.end_facet();
       }
       builder.end_surface();
+
     }
 
     return poly;
@@ -247,23 +247,25 @@ void Exercise20::prepareMesh(Polyhedron& poly)
     // The normals are defined per face. Thus, each vertex uses the face normal of its corresponding face.
     // Keep in mind, that the vertex and normal arrays use different point types than CGAL.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    Point_3 p3_curr;
+    glm::vec3 norm;
+    glm::vec3 curr;
+    for(auto i = poly.facets_begin(); i != poly.facets_end(); ++i) {
 
-    for(auto i = poly.halfedges_begin(); i != poly.halfedges_end(); ++i) {
+        // normal
+        auto p3_norm = i->plane();
+        norm = glm::vec3(p3_norm.x(), p3_norm.y(), p3_norm.z());
 
-        // vertex
-        Point_3 p3_curr = i->vertex()->point();
-        glm::vec3 curr(p3_curr.x(), p3_curr.y(), p3_curr.z());
-        curr *= 2;
-        m_verticesRaw.push_back(curr);
-
-        // facet normal
-        Point_3 p3_prev = i->prev()->vertex()->point();
-        Point_3 p3_next = i->next()->vertex()->point();
-        glm::vec3 prev(p3_prev.x(), p3_prev.y(), p3_prev.z());
-        glm::vec3 next(p3_next.x(), p3_next.y(), p3_next.z());
-        glm::vec3 normal = cross(curr - prev, next - curr);
-        m_normalsRaw.push_back(normalize(normal));
-
+        // vertices
+        for(auto j = i->facet_begin(); ;) {
+          p3_curr = j->vertex()->point();
+          curr = glm::vec3(p3_curr.x(), p3_curr.y(), p3_curr.z());
+          curr *= 2;
+          m_verticesRaw.push_back(curr);
+          m_normalsRaw.push_back(norm);
+          ++j;
+          if(j == i->facet_begin()) break;
+        }
     }
 
 }
