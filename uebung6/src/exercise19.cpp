@@ -59,7 +59,9 @@ void beginCallback(GLenum prim)
 void vertexCallback(void * vdata)
 {
     //TODO
-    glVertex3dv((GLdouble *)vdata);
+    glVertex3fv((GLfloat *)vdata);
+    glColor3f(0.0, 1.0, 0.0);
+
 }
 
 void combineCallback(double coords[3], double vertex_data[4], float weight[4], double **dataOut)
@@ -99,7 +101,6 @@ void Exercise19::render()
     //drawContours();
     //tessellatePolygons();
 
-    //tessellatePolygons();
     drawContours();
     tessellatePolygons();
 
@@ -173,8 +174,8 @@ void Exercise19::tessellatePolygons()
 
 
 #if 1
-    gluTessBeginPolygon(tess, NULL);
     for(auto i = m_contours.begin(); i != m_contours.end(); ++i) {
+      gluTessBeginPolygon(tess, NULL);
       gluTessBeginContour(tess);
       for(auto j = i->begin(); j != i->end(); ++j) {
         GLdouble data[3];
@@ -184,8 +185,8 @@ void Exercise19::tessellatePolygons()
         gluTessVertex(tess, data, data);
       }
       gluTessEndContour(tess);
+      gluTessEndPolygon(tess);
     }
-    gluTessEndPolygon(tess);
     gluDeleteTess(tess);
 #endif
 }
