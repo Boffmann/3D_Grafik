@@ -53,15 +53,13 @@ void errorCallback(GLenum errorCode)
 void beginCallback(GLenum prim)
 {
     //TODO
-    glBegin(prim);
+    g_primitive = prim;
 }
 
 void vertexCallback(void * vdata)
 {
     //TODO
-    glVertex3fv((GLfloat *)vdata);
-    glColor3f(0.0, 1.0, 0.0);
-
+    g_vertices.push_back(*((Vertex *) vdata));
 }
 
 void combineCallback(double coords[3], double vertex_data[4], float weight[4], double **dataOut)
@@ -75,7 +73,28 @@ void combineCallback(double coords[3], double vertex_data[4], float weight[4], d
 void endCallback(void)
 {
     //TODO
+    glBegin(g_primitive);
+    double contour_color[3] = {0.0, 0.5, 0.0};
+    glColor3dv(contour_color);
+
+    for(auto i = g_vertices.begin(); i != g_vertices.end(); ++i) {
+      double data[3] = {i->x, i->y, i->z};
+      glVertex3dv(data);
+    }
+
     glEnd();
+
+    glBegin(GL_LINE_LOOP);
+    double line_color[3] = {1.0, 1.0, 1.0};
+    glColor3dv(line_color);
+
+    for(auto i = g_vertices.begin(); i != g_vertices.end(); ++i) {
+      double data[3] = {i->x, i->y, i->z};
+      glVertex3dv(data);
+    }
+
+    glEnd();
+    g_vertices.clear();
 }
 
 
@@ -166,14 +185,14 @@ void Exercise19::drawContours()
 void Exercise19::tessellatePolygons()
 {
     //TODO
-
     GLUtesselator* tess = gluNewTess();
-    gluTessCallback(tess, GLU_TESS_VERTEX, (void (*) ()) &vertexCallback);
     gluTessCallback(tess, GLU_TESS_BEGIN, (void (*) ()) &beginCallback);
+    gluTessCallback(tess, GLU_TESS_VERTEX, (void (*) ()) &vertexCallback);
+    gluTessCallback(tess, GLU_TESS_COMBINE, (void (*) ()) &combineCallback);
+    gluTessCallback(tess, GLU_TESS_ERROR, (void (*) ()) &errorCallback);
     gluTessCallback(tess, GLU_TESS_END, (void (*) ()) &endCallback);
 
-
-#if 1
+#if 0
     for(auto i = m_contours.begin(); i != m_contours.end(); ++i) {
       gluTessBeginPolygon(tess, NULL);
       gluTessBeginContour(tess);
@@ -189,6 +208,22 @@ void Exercise19::tessellatePolygons()
     }
     gluDeleteTess(tess);
 #endif
+      glShadeModel(GL_FLAT);
+      gluTessBeginPolygon(tess, NULL);
+
+      for(Contour &contour:m_contours) {
+        gluTessBeginContour(tess);
+
+        for (Vertex &vertex:contour) {
+          gluTessVertex(tess, (GLdouble *) &vertex, &vertex);
+         }
+
+         gluTessEndContour(tess);
+      }
+
+      gluTessEndPolygon(tess);
+      gluDeleteTess(tess);
+
 }
 
 bool Exercise19::onMouseReleased(QMouseEvent * mouseEvent)

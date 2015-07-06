@@ -231,6 +231,7 @@ void Exercise20::prepareMesh(Polyhedron& poly)
     {
         // TODO method B - sqrt3
         CGAL::Subdivision_method_3::Sqrt3_subdivision(poly, steps);
+
     }
 
     std::transform(poly.facets_begin(), poly.facets_end(), poly.planes_begin(),
@@ -260,6 +261,7 @@ void Exercise20::prepareMesh(Polyhedron& poly)
         for(auto j = i->facet_begin(); ;) {
           p3_curr = j->vertex()->point();
           curr = glm::vec3(p3_curr.x(), p3_curr.y(), p3_curr.z());
+          curr = glm::normalize(curr);
           curr *= 2;
           m_verticesRaw.push_back(curr);
           m_normalsRaw.push_back(norm);
