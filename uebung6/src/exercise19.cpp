@@ -88,7 +88,7 @@ void endCallback(void)
     double line_color[3] = {1.0, 1.0, 1.0};
     glColor3dv(line_color);
 
-    for(auto i = g_vertices.begin(); i != g_vertices.end(); ++i) {
+    for(auto i = g_combinedVertices.begin(); i != g_combinedVertices.end(); ++i) {
       double data[3] = {i->x, i->y, i->z};
       glVertex3dv(data);
     }
