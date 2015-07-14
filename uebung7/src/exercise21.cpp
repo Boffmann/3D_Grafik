@@ -176,20 +176,18 @@ void Exercise21::drawHeightFieldPoints()
 
     glColor3f(1.f, 1.f, 1.f);
 
-    for(int i = 0; i < SIZE; i++)
-    {
-        for(int j = 0; j < SIZE; j++)
-        {
-            /////////////////////////////////////////////////////////////////////////////////////////////////
-            // TODO: Aufgabe 21
-            // Visualize the height field using GL_POINTS.
-            /////////////////////////////////////////////////////////////////////////////////////////////////
+    for(int i = 0; i < SIZE; i++) {
+        for(int j = 0; j < SIZE; j++) {
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+        // TODO: Aufgabe 21
+        // Visualize the height field using GL_POINTS.
+        /////////////////////////////////////////////////////////////////////////////////////////////////
             int sqrtGridSize = SIZE;
-                for(int i = 0; i < sqrtGridSize; i++){
-                    for(int j = 0; j < sqrtGridSize; j++){
-                        glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
-                    }
+            for(int i = 0; i < sqrtGridSize; i++) {
+                for(int j = 0; j < sqrtGridSize; j++) {
+                    glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
                 }
+            }
         }
     }
     glEnd();
@@ -208,13 +206,14 @@ void Exercise21::drawHeightFieldLines()
     // Visualize the height field using GL_LINES.
     // Make sure that if SIZE changes, the rendering results are still correct.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+
     int sqrtGridSize = SIZE;
-                for(int i = 0; i < sqrtGridSize; i++){
-                    for(int j = 0; j < sqrtGridSize; j++){
-                        glVertex3f(m_heightField[i][j][0], 0, m_heightField[i][j][2]);
-                        glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
-                    }
-                }
+    for(int i = 0; i < sqrtGridSize; i++){
+        for(int j = 0; j < sqrtGridSize; j++){
+            glVertex3f(m_heightField[i][j][0], 0, m_heightField[i][j][2]);
+            glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
+        }
+    }
 
     glEnd();
     glPopMatrix();
@@ -244,7 +243,6 @@ void Exercise21::drawTriangulatedHeightField()
         }
         glEnd();
     }
-
     glPopMatrix();
     glEnable(GL_CULL_FACE);
 }
