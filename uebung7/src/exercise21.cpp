@@ -23,6 +23,7 @@
 #endif
 
 #include "util/camera.h"
+#include <iostream>
 
 Exercise21::Exercise21()
     : AbstractExercise()
@@ -93,6 +94,7 @@ void Exercise21::calculateHeightField()
 
 bool Exercise21::initialize()
 {
+	std::cout << "SIZE: " << SIZE;
     initializeOpenGLFunctions();
 
     glShadeModel(GL_SMOOTH);
@@ -107,6 +109,12 @@ bool Exercise21::initialize()
     //   glMap2f();
     //   glEnable(GL_MAP2_VERTEX_3);
     //   glMapGrid2f();
+    	float root = sqrt(SIZE)-1;
+        glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, 8, 0.0, 1.0, 3*SIZE, 8, &m_heightField[0][0][0]);
+        glEnable(GL_MAP2_VERTEX_3);
+        glMapGrid2f(SIZE*SIZE+SIZE, 0.0, 1.0, SIZE*SIZE+SIZE, 0.0, 1.0);
+        //glMapGrid2f(1, 0.0, SIZE, 1, 0.0, SIZE);
+        
 
     glEnable(GL_AUTO_NORMAL);
     glEnable(GL_NORMALIZE);
@@ -163,6 +171,7 @@ void Exercise21::drawHeightFieldPoints()
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     // glPointSize();
+    glPointSize(5.0);
 
     glBegin(GL_POINTS);
 
@@ -176,6 +185,12 @@ void Exercise21::drawHeightFieldPoints()
             // TODO: Aufgabe 21
             // Visualize the height field using GL_POINTS.
             /////////////////////////////////////////////////////////////////////////////////////////////////
+            int sqrtGridSize = SIZE;
+                for(int i = 0; i < sqrtGridSize; i++){
+                    for(int j = 0; j < sqrtGridSize; j++){
+                        glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
+                    }
+                }
         }
     }
     glEnd();
@@ -194,6 +209,13 @@ void Exercise21::drawHeightFieldLines()
     // Visualize the height field using GL_LINES.
     // Make sure that if SIZE changes, the rendering results are still correct.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    int sqrtGridSize = SIZE;
+                for(int i = 0; i < sqrtGridSize; i++){
+                    for(int j = 0; j < sqrtGridSize; j++){
+                        glVertex3f(m_heightField[i][j][0], 0, m_heightField[i][j][2]);
+                        glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
+                    }
+                }
 
     glEnd();
     glPopMatrix();
@@ -206,13 +228,27 @@ void Exercise21::drawTriangulatedHeightField()
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glColor3f(1.f, 1.f, 1.f);
+    glBegin(GL_TRIANGLE_STRIP);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     // TODO: Aufgabe 21
     // Triangulate the given height field. Use GL_TRIANGLE_STRIPS.
     // Make sure that if SIZE changes, the triangulation still works.
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    int sqrtGridSize = SIZE-1;
+                for(int i = 1; i < sqrtGridSize; i++){
+                    for(int j = 0; j < sqrtGridSize; j++){
+                    	//if()
+                    	//if(i%2 == 0)
+                    	{
+                        glVertex3f(m_heightField[i][j][0],m_heightField[i][j][1],m_heightField[i][j][2]);
+                        glVertex3f(m_heightField[i-1][j][0],m_heightField[i-1][j][1],m_heightField[i-1][j][2]);
+                        glVertex3f(m_heightField[i][j+1][0],m_heightField[i][j+1][1],m_heightField[i][j+1][2]);
+                    	}
+                    }
+                }
 
+    glEnd();
     glPopMatrix();
     glEnable(GL_CULL_FACE);
 }
@@ -242,6 +278,7 @@ void Exercise21::drawHeightFieldBezierPatch()
     // Draw a *filled* bezier patch using the opengl evaluator
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //glEvalMesh2();
+    glEvalMesh2(GL_FILL, 0, SIZE*SIZE+SIZE, 0, SIZE*SIZE+SIZE);
 
     glPopMatrix();
     glDisable(GL_LIGHTING);
