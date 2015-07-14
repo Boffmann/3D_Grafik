@@ -38,24 +38,19 @@ void main()
     // Implement toon shading. Take the intensity and baseColor into account
     ///////////////////////////////////////////////////////////////////
 
-    //intensity = sin(acos(normN.x * normL.x + normN.y * normL.y + normN.z * normL.z + 1 * normL.w));
-    float angle = acos(normN.x * normL.x + normN.y * normL.y + normN.z * normL.z + 1 * normL.w);
-    float int1 = sin(angle);
-    float int2 = angle/90.0;
+    intensity = (normN.x * normL.x + normN.y * normL.y + normN.z * normL.z);
 
-    if(int1 < 0.01)
-    	color *= 0.0;
-    else if(int1 <= 0.33)
-    	color *= 1.0/6.0;
-    else if(int1 <= (0.66)
-    	color *= 3.0/6.0;
-    else if(int1 <= 0.99)
-    	color *= 5.0/6.0;
-    //else
-    //	color *= 1.0;
+    if(intensity < 0.01) {
+        color = vec4(0.0 * color.xyz, color.w);
+    } else if(intensity <= 0.33) {
+        color = vec4(0.33 * color.xyz, color.w);
+    } else if(intensity <= 0.66) {
+        color = vec4(0.66 * color.xyz, color.w);
+    } else if(intensity <= 0.99) {
+        color = vec4(0.99 * color.xyz, color.w);
+    } else if(intensity > 0.99) {
+        color = vec4(1.0, 1.0, 1.0, color.w);
+    }
 
-
-
-        
-	out_color = color;
+    out_color = color;
 }
