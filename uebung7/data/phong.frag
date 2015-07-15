@@ -43,7 +43,6 @@ void main()
     vec4 normL = normalize(light_pos);
 
     // write Total Color:
-    vec4 resultColor = vec4(1.0, 1.0, 1.0, 1.0);
     float dotNL = dot(normN, normL.xyz);
     float angle = acos(dotNL);
     float x = normN.x;
@@ -71,6 +70,5 @@ void main()
 
     vec4 intensity = light_iAmbient * material_ambient + light_iDiffuse * material_diffuse * dotNL + light_iSpecular * material_specular * pow(dotRV,material_shininess);
 
-    resultColor = intensity;
-    out_color = clamp(resultColor, 0.0, 1.0);
+    out_color = clamp(intensity, 0.0, 1.0);
 }
