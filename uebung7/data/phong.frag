@@ -60,9 +60,6 @@ void main()
     trans1[3] = vec4(-normL.x/2, -normL.y/2, -normL.z/2, 1.0);
 
     //vec4 normR = normL;
-    //vec4 tmp = vec4(0.5 * normR.x, 0.5 * normR.y, 0.5 * normR.z, normR.w);
-    //tmp *= 0.5;
-    //normR -= tmp;
     //normR -= (normR/2);
     vec4 normR = normL * rotation * trans1;
 
